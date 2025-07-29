@@ -136,13 +136,27 @@
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl font-bold text-slate-900 mb-4 scroll-animate">✨ AI 프로젝트 아이디어 생성기</h2>
                 <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-8 scroll-animate">Web3 아이디어가 있나요? Flexir의 AI 컨설턴트가 구체적인 기획안으로 발전시켜 드립니다.</p>
-                <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md scroll-animate">
+                
+                <!-- API 키 입력 UI -->
+                <div id="api-key-ui" class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md scroll-animate">
+                    <label for="api-key-input" class="font-bold text-slate-700">Gemini API 키를 입력해주세요</label>
+                    <input type="password" id="api-key-input" class="w-full mt-2 p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="API 키를 여기에 붙여넣으세요">
+                    <p class="text-xs text-slate-500 mt-2">API 키는 브라우저에만 저장되며, 서버로 전송되지 않습니다. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 hover:underline">여기서 API 키를 발급받으세요.</a></p>
+                    <button id="save-api-key-btn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg btn-hover">
+                        저장 후 시작하기
+                    </button>
+                </div>
+
+                <!-- 아이디어 생성기 메인 UI (초기 숨김) -->
+                <div id="generator-main-ui" class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md hidden">
                     <textarea id="idea-input" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" rows="3" placeholder="예: 아티스트를 위한 NFT 마켓플레이스"></textarea>
                     <button id="generate-idea-btn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg btn-hover flex items-center justify-center">
                         <span id="btn-text">기획안 생성하기</span>
                         <i id="btn-icon" class="fas fa-lightbulb ml-2"></i>
                     </button>
+                     <button id="reset-api-key-btn" class="mt-2 text-xs text-slate-500 hover:underline">API 키 변경</button>
                 </div>
+
                 <div id="idea-loading" class="mt-8 hidden flex justify-center">
                     <div class="loader"></div>
                 </div>
@@ -351,11 +365,41 @@
             const ideaLoading = document.getElementById('idea-loading');
             const btnText = document.getElementById('btn-text');
             const btnIcon = document.getElementById('btn-icon');
+            const apiKeyInput = document.getElementById('api-key-input');
+            const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+            const apiKeyUi = document.getElementById('api-key-ui');
+            const generatorMainUi = document.getElementById('generator-main-ui');
+            const resetApiKeyBtn = document.getElementById('reset-api-key-btn');
+
+            let userApiKey = '';
+
+            saveApiKeyBtn.addEventListener('click', () => {
+                const key = apiKeyInput.value.trim();
+                if (key) {
+                    userApiKey = key;
+                    apiKeyUi.classList.add('hidden');
+                    generatorMainUi.classList.remove('hidden');
+                } else {
+                    alert('API 키를 입력해주세요.');
+                }
+            });
+
+            resetApiKeyBtn.addEventListener('click', () => {
+                userApiKey = '';
+                apiKeyInput.value = '';
+                generatorMainUi.classList.add('hidden');
+                apiKeyUi.classList.remove('hidden');
+                ideaOutput.innerHTML = '';
+            });
 
             generateIdeaBtn.addEventListener('click', async () => {
                 const userInput = ideaInput.value.trim();
                 if (!userInput) {
                     ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> 아이디어를 입력해주세요.</span></div>`;
+                    return;
+                }
+                if (!userApiKey) {
+                    ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> API 키가 설정되지 않았습니다.</span></div>`;
                     return;
                 }
 
@@ -411,8 +455,7 @@
                 };
                 
                 try {
-                    const apiKey = ""; // API 키는 비워 둡니다.
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${userApiKey}`;
                     
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -421,7 +464,8 @@
                     });
 
                     if (!response.ok) {
-                        throw new Error(`API 요청 실패: ${response.statusText}`);
+                        const errorData = await response.json();
+                        throw new Error(`API 요청 실패: ${errorData.error.message}`);
                     }
 
                     const result = await response.json();
@@ -456,7 +500,7 @@
                     }
                 } catch (error) {
                     console.error("Gemini API Error:", error);
-                    ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> 기획안 생성에 실패했습니다. 잠시 후 다시 시도해주세요.</span></div>`;
+                    ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> 기획안 생성에 실패했습니다. API 키가 올바른지 확인해주세요. (${error.message})</span></div>`;
                 } finally {
                     // 로딩 상태 종료
                     ideaLoading.classList.add('hidden');
