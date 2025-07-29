@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexir - AI 기반 블록체인 솔루션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #0f172a; /* slate-900 */
+        }
+        .modal-content::-webkit-scrollbar { display: none; }
+        .modal-content { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .subtle-glow {
+            transition: all 0.3s ease-in-out;
+        }
+        .subtle-glow:hover {
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.1), 0 8px 10px -6px rgba(37, 99, 235, 0.1);
+            transform: translateY(-4px);
+        }
+        .btn-hover {
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-hover:hover {
+            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+            transform: translateY(-2px);
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .scroll-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 로딩 스피너 */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 헤더 -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-slate-900">Flexir</a>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#services" class="text-slate-600 hover:text-blue-600 transition">제공 서비스</a>
+                <a href="#portfolio" class="text-slate-600 hover:text-blue-600 transition">포트폴리오</a>
+                <a href="#idea-generator" class="text-slate-600 hover:text-blue-600 transition">✨ AI 아이디어</a>
+                <a href="#tech-stack" class="text-slate-600 hover:text-blue-600 transition">기술 스택</a>
+            </div>
+            <a href="#contact" class="hidden md:block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg btn-hover">
+                문의하기
+            </a>
+            <button id="mobile-menu-button" class="md:hidden text-slate-800">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </nav>
+        <!-- 모바일 메뉴 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white p-4 border-t border-slate-200">
+            <a href="#services" class="mobile-menu-link block py-2 px-4 text-slate-700 hover:bg-slate-100 rounded-md">제공 서비스</a>
+            <a href="#portfolio" class="mobile-menu-link block py-2 px-4 text-slate-700 hover:bg-slate-100 rounded-md">포트폴리오</a>
+            <a href="#idea-generator" class="mobile-menu-link block py-2 px-4 text-slate-700 hover:bg-slate-100 rounded-md">✨ AI 아이디어</a>
+            <a href="#tech-stack" class="mobile-menu-link block py-2 px-4 text-slate-700 hover:bg-slate-100 rounded-md">기술 스택</a>
+            <a href="#contact" class="mobile-menu-link block mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition text-center">문의하기</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- 히어로 섹션 -->
+        <section id="hero" class="py-24 md:py-40 text-center">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-900 mb-4">Flexir 플렉서</h1>
+                <h2 class="text-2xl md:text-3xl text-blue-600 mb-6">블록체인 전문 개발팀</h2>
+                <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">목표 달성을 위해 언제든 함께 고민하겠습니다. Web3 프로젝트의 성공적인 런칭, 저희 Flexir가 함께합니다.</p>
+            </div>
+        </section>
+
+        <!-- 제공 서비스 -->
+        <section id="services" class="py-20 bg-slate-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-12 scroll-animate">🛠️ 제공 서비스</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-md subtle-glow scroll-animate"><i class="fas fa-cubes text-4xl text-blue-600 mb-4"></i><h3 class="text-xl font-bold mb-2">스마트컨트랙트</h3><p class="text-slate-600">EVM, Solana, Cosmos 기반 컨트랙트 설계 및 메인넷 배포</p></div>
+                    <div class="bg-white p-8 rounded-lg shadow-md subtle-glow scroll-animate" style="transition-delay: 100ms;"><i class="fas fa-laptop-code text-4xl text-blue-600 mb-4"></i><h3 class="text-xl font-bold mb-2">디앱(dApp) 개발</h3><p class="text-slate-600">React, Vue 프론트엔드 및 Node, Spring 백엔드 API 개발</p></div>
+                    <div class="bg-white p-8 rounded-lg shadow-md subtle-glow scroll-animate" style="transition-delay: 200ms;"><i class="fas fa-robot text-4xl text-blue-600 mb-4"></i><h3 class="text-xl font-bold mb-2">자동화 · 데이터</h3><p class="text-slate-600">트레이딩 봇, 대용량 데이터 수집 및 파이프라인 구축</p></div>
+                    <div class="bg-white p-8 rounded-lg shadow-md subtle-glow scroll-animate" style="transition-delay: 300ms;"><i class="fas fa-people-arrows text-4xl text-blue-600 mb-4"></i><h3 class="text-xl font-bold mb-2">Web2 → Web3 컨설팅</h3><p class="text-slate-600">기존 서비스의 블록체인 전환 설계 및 온보딩 전략</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 주요 실적 -->
+        <section id="achievements" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-12 scroll-animate">🏆 주요 실적</h2>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 text-left">
+                    <div class="bg-white p-6 rounded-lg shadow-md scroll-animate"><h3 class="text-lg font-bold text-blue-600">글로벌 해커톤</h3><p class="text-3xl font-bold mt-2">우승 및 다수 수상</p><p class="text-slate-500 mt-1">ETHGlobal, HashKey, EduChain 등</p></div>
+                    <div class="bg-white p-6 rounded-lg shadow-md scroll-animate" style="transition-delay: 100ms;"><h3 class="text-lg font-bold text-blue-600">서비스 운영 경험</h3><p class="text-3xl font-bold mt-2">50+ 프로젝트</p><p class="text-slate-500 mt-1">토큰·NFT 프로젝트 실제 운영</p></div>
+                    <div class="bg-white p-6 rounded-lg shadow-md scroll-animate" style="transition-delay: 200ms;"><h3 class="text-lg font-bold text-blue-600">성장 성과</h3><p class="text-3xl font-bold mt-2">DAU 5,000 돌파</p><p class="text-slate-500 mt-1">출시 48시간 내 달성 사례 보유</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 포트폴리오 -->
+        <section id="portfolio" class="py-20 bg-slate-100">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-slate-900 text-center mb-12 scroll-animate">💼 포트폴리오</h2>
+                <div id="portfolio-grid" class="space-y-16">
+                    <!-- 포트폴리오 목록이 여기에 동적으로 삽입됩니다 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- AI 프로젝트 아이디어 생성기 -->
+        <section id="idea-generator" class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4 scroll-animate">✨ AI 프로젝트 아이디어 생성기</h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-8 scroll-animate">Web3 아이디어가 있나요? Flexir의 AI 컨설턴트가 구체적인 기획안으로 발전시켜 드립니다.</p>
+                <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md scroll-animate">
+                    <textarea id="idea-input" class="w-full p-3 border border-slate-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" rows="3" placeholder="예: 아티스트를 위한 NFT 마켓플레이스"></textarea>
+                    <button id="generate-idea-btn" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg btn-hover flex items-center justify-center">
+                        <span id="btn-text">기획안 생성하기</span>
+                        <i id="btn-icon" class="fas fa-lightbulb ml-2"></i>
+                    </button>
+                </div>
+                <div id="idea-loading" class="mt-8 hidden flex justify-center">
+                    <div class="loader"></div>
+                </div>
+                <div id="idea-output" class="mt-8 text-left max-w-4xl mx-auto"></div>
+            </div>
+        </section>
+
+        <!-- 기술 스택 -->
+        <section id="tech-stack" class="py-20 bg-slate-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-10 scroll-animate">💻 기술 스택</h2>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-8 scroll-animate">Flexir 팀은 폭넓고 깊이 있는 기술 스택을 바탕으로 최적의 솔루션을 제공합니다.</p>
+                <div class="bg-white p-4 rounded-lg inline-block shadow-lg scroll-animate">
+                    <img src="https://placehold.co/800x500/f8fafc/0f172a?text=Tech+Stack+Image" alt="Flexir Tech Stack" class="rounded-lg max-w-full h-auto md:max-w-3xl" onerror="this.onerror=null;this.src='https://placehold.co/800x600/f8fafc/0f172a?text=Tech+Stack';">
+                </div>
+                 <p class="text-sm text-slate-500 mt-4 scroll-animate">✨ 기술 로고에 마우스를 올려 AI 설명을 확인해보세요!</p>
+            </div>
+        </section>
+        
+        <!-- 협업 방식 -->
+        <section id="workflow" class="py-20">
+             <div class="container mx-auto px-6 scroll-animate">
+                <div class="bg-blue-600 text-white rounded-lg p-8 md:p-12 flex items-start space-x-6"><div class="text-4xl mt-1">💡</div><div><h3 class="text-2xl font-bold mb-4">협업 방식</h3><ul class="list-disc list-inside space-y-2 opacity-90"><li>Kick-off 미팅 → 요구사항 분석 → 모듈별 병행 개발 → 통합 QA → 런칭 & 유지보수</li><li><strong>PM이 전 과정을 책임지고 소통합니다.</strong></li></ul></div></div>
+             </div>
+        </section>
+    </main>
+
+    <!-- 푸터 -->
+    <footer id="contact" class="bg-slate-800 text-slate-300">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-2xl font-bold text-white">Contact Us</h2><p class="mt-2 mb-6">프로젝트 문의 및 협업 제안을 기다립니다.</p><a href="mailto:contact@flexir.dev" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition text-lg btn-hover">contact@flexir.dev</a>
+            <div class="flex justify-center space-x-6 mt-8">
+                <a href="https://github.com/6luv/hangul-nft" target="_blank" class="hover:text-white text-2xl transition"><i class="fab fa-github"></i></a>
+                <a href="https://ethglobal.com/showcase/flexir-8e784" target="_blank" class="hover:text-white text-2xl transition"><i class="fas fa-globe"></i></a>
+                <a href="https://kmong.com/gig/411503" target="_blank" class="hover:text-white text-2xl transition"><i class="fas fa-briefcase"></i></a>
+            </div>
+            <p class="text-slate-500 mt-10">&copy; 2025 Flexir. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 모달 -->
+    <div id="portfolio-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b border-slate-200">
+                <h3 id="modal-title" class="text-2xl font-bold text-slate-900"></h3>
+                <button id="close-modal" class="text-slate-500 hover:text-slate-800 text-3xl leading-none">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6 overflow-y-auto modal-content text-slate-700">
+                <!-- 모달 내용이 여기에 동적으로 삽입됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const portfolioData = [
+            { title: "Flexir - pre market (2024)", images: ["https://placehold.co/1200x800/e2e8f0/1e293b?text=Flexir+Pre-Market"], tags: ["Solidity", "React", "Node.js", "dApp"], description: "ETHGlobal 해커톤 수상작, 프리세일 구조를 가진 마켓 플랫폼", details: { "기간": "2024.09 – 2024.12 (총 4개월)", "클라이언트": "Ludium, ETHGlobal Bangkok", "팀 기여 분야": "디앱 프론트엔드, 백엔드, 블록체인 개발", "사용 기술": "TypeScript, Node.js, Chakra UI, Solidity, React, Tailwind CSS, ethers.js", "역할별 기여": "<strong>프론트엔드</strong>: 블록체인 이벤트 기반 메인 페이지 개발<br><strong>백엔드</strong>: 관리자 API 및 컨트랙트 이벤트 구독<br><strong>블록체인</strong>: 프리세일 구조 설계·컨트랙트 개발", "주요 성과": "Ludium Road to Global 2024 1위<br>ETHGlobal Blockscout - Blockscout Explorer 수상", "레퍼런스": `<a href="https://ethglobal.com/showcase/flexir-8e784" class="text-blue-600 hover:underline" target="_blank">ETHGlobal Showcase</a><br><a href="https://youtu.be/FjMxbwmZ-Wg" class="text-blue-600 hover:underline" target="_blank">YouTube Demo</a>` } },
+            { title: "Coquiz (2025)", images: ["image 1.jpg", "image 2.jpg", "image 3.jpg"], tags: ["Solidity", "PHP", "Web3", "GameFi"], description: "EduChain 해커톤 게임 부문 1위, 기존 퀴즈 서비스의 성공적인 Web3 전환", details: { "기간": "2024.12 – 현재", "클라이언트": "Coquiz (대체불가능회사)", "팀 기여 분야": "블록체인, 디앱 프론트, 백엔드 개발, 컨설팅", "사용 기술": "Solidity, PHP, JavaScript, Hardhat, Node.js, Tailwind", "역할별 기여": "<strong>블록체인</strong>: 상금풀·NFT 컨트랙트 및 Wepin 지갑 연동, 토큰·NFT·스테이킹 컨트랙트<br><strong>프론트엔드</strong>: Wepin 지갑 연동 UI<br><strong>백엔드</strong>: 토큰 전송 API<br><strong>컨설팅</strong>: Web2→Web3 전환 설계", "주요 성과": "EduChain 해커톤 게임 부문 1위<br>실서비스 Web3 전환 성공", "레퍼런스": `<a href="https://www.blockchaintoday.co.kr/news/articleView.html?idxno=50284" class="text-blue-600 hover:underline" target="_blank">관련 뉴스 기사</a>` } },
+            { title: "Minty Way (2024)", images: ["image 4.jpg"], tags: ["Solidity", "React", "Ethers.js", "Launchpad"], description: "미니 해커톤 우승작. 클릭 한 번으로 ERC-20 토큰을 생성하고 관리하는 런치패드.", details: { "기간": "2024.07 – 2024.08 (총 3주)", "클라이언트": "—", "팀 기여 분야": "블록체인, 디앱 프론트", "사용 기술": "Solidity, React, ethers.js, Chakra UI", "역할별 기여": "<strong>기획</strong>: 아이디어 발굴 및 전체 기획<br><strong>블록체인</strong>: ERC-20 토큰·런치패드 개발<br><strong>프론트엔드</strong>: 토큰 관리 UI", "주요 성과": "미니 해커톤 우승" } },
+            { title: "크로스체인 텔레그램 트레이딩 봇 (2025)", images: ["image 5.png"], tags: ["Python", "Telegram", "Web3.py", "Bot"], description: "HashKey 해커톤 입상작, 여러 체인을 지원하는 텔레그램 거래 봇", details: { "기간": "2024.03 (총 3일)", "클라이언트": "HashKey 해커톤", "팀 기여 분야": "디앱 프론트, 백엔드", "사용 기술": "Python, Web3.py, Telegram Bot API, Solidity", "역할별 기여": "<strong>프론트엔드</strong>: Telegram 봇 UI<br><strong>백엔드</strong>: 컨트랙트 호출·트랜잭션 처리", "주요 성과": "HashKey Chain Hackathon: Taiyi 입상", "레퍼런스": `<a href="https://github.com/HashKeyHackathon2025/HashKey-Bot" class="text-blue-600 hover:underline" target="_blank">GitHub Repository</a>` } },
+            { title: "Love Blocks (2024)", images: ["image 6.jpg", "image 7.jpg"], tags: ["Solidity", "React", "Node.js", "Donation"], description: "블록체인 기반 기부 생태계 확장을 위한 온체인 기부 플랫폼", details: { "기간": "2024.07 – 2024.08 (총 1개월)", "클라이언트": "내부 R&D", "팀 기여 분야": "블록체인, 프론트엔드, 백엔드", "사용 기술": "Solidity, React, Node.js, Tailwind, Supabase", "역할별 기여": "<strong>블록체인</strong>: 기부·멀티시그 컨트랙트 개발<br><strong>프론트엔드</strong>: Coingecko API 연동 가격 페이지<br><strong>백엔드</strong>: Supabase 기반 데이터 처리", "주요 성과": "온체인 기부 플랫폼 프로토타입 구현 완료" } },
+            { title: "DEX 탈중앙화 거래소 (2024)", images: ["https://placehold.co/1200x800/e2e8f0/1e293b?text=DEX", "image 8.jpg"], tags: ["Solidity", "React", "DeFi", "TypeScript"], description: "Vault 유동성 UX를 개선한 자체 개발 탈중앙화 거래소", details: { "기간": "2024.07 – 2024.08 (총 2개월)", "클라이언트": "자체 개발", "팀 기여 분야": "구조 설계, 블록체인, 디앱 프론트, 백엔드", "사용 기술": "Solidity, TypeScript, React, Tailwind, Redux", "역할별 기여": "<strong>블록체인</strong>: Vault 컨트랙트 개발<br><strong>프론트엔드</strong>: 유동성·스테이킹 UI", "주요 성과": "Vault 유동성 UX 개선·완료" } },
+            { title: "PersonaChain AI (2025)", images: [], tags: ["Solana", "AI", "Data", "GraphQL"], description: "온체인 지갑 데이터 20만 건을 수집 및 가공하여 AI 페르소나를 생성하는 프로젝트", details: { "기간": "2025.04 – 2025.04 (총 2주)", "클라이언트": "Buidl Asia", "팀 기여 분야": "데이터 처리, 백엔드, 블록체인(Solana)", "사용 기술": "TypeScript, Express, SQLite, GraphQL, Eliza OS", "역할별 기여": "<strong>데이터 처리</strong>: GraphQL로 온체인 지갑 20만 건 수집·가공", "주요 성과": "온체인 지갑 20만 개 이상 실시간 처리" } },
+            { title: "Solstice (2025)", images: [], tags: ["Solana", "Rust", "Storage", "Performance"], description: "대용량 파일을 온체인에 효율적으로 저장하여 파일 기록 속도를 100배 단축", details: { "기간": "2025.02 – 2025.03 (총 1개월)", "클라이언트": "Solana Super Team Korea", "팀 기여 분야": "블록체인 개발(Solana)", "사용 기술": "Rust, TypeScript, Solana Web3", "역할별 기여": "<strong>블록체인</strong>: 대용량 파일 온체인 저장 구조 설계·컨트랙트 개발", "주요 성과": "기존 방식 대비 파일 기록 속도 약 100배 단축" } },
+            { title: "주식회사 OOOO (2025)", images: [], tags: ["Solana", "NFT", "Staking", "Vesting"], description: "Solana 기반 NFT 스테이킹 및 베스팅 컨트랙트 개발 및 메인넷 배포", details: { "기간": "2025.02 – 현재", "클라이언트": "주식회사 OOOO", "팀 기여 분야": "블록체인(Solana), 프론트엔드, 백엔드", "사용 기술": "Rust, Anchor, Vue.js, Spring", "역할별 기여": "<strong>블록체인</strong>: NFT 스테이킹·베스팅 컨트랙트 메인넷 배포<br><strong>프론트엔드</strong>: 사용자 컨트랙트 기능 연동<br><strong>백엔드</strong>: Solanaj 기반 관리자 API" } },
+            { title: "Vesting 프로그램 (2025)", images: [], tags: ["Solana", "Vesting", "Automation", "Spring"], description: "토큰 베스팅 프로그램을 개발하고 자동 분배 로직을 구현하여 실제 계약에 사용", details: { "기간": "2025.05 – 2025.07 (총 2개월)", "클라이언트": "—", "팀 기여 분야": "블록체인(Solana), 디앱 프론트, 백엔드, 자동화", "사용 기술": "Solana, Anchor, Rust, Spring, Vue.js, MySQL", "역할별 기여": "<strong>블록체인</strong>: 토큰 베스팅 프로그램 개발·배포<br><strong>프론트엔드</strong>: Vue 관리자 UI<br><strong>백엔드</strong>: Java API·DB 동기화<br><strong>자동화</strong>: 분배 자동 실행 로직", "주요 성과": "실제 계약 단계에서 베스팅 계약 실사용 중" } },
+            { title: "Coin Staking (2025)", images: [], tags: ["Solana", "Staking", "DeFi", "Vue.js"], description: "Solana 기반 코인 스테이킹 및 보상 프로그램을 개발하여 실제 계약에 사용", details: { "기간": "2025.03 – 2025.04 (총 1개월)", "클라이언트": "—", "팀 기여 분야": "블록체인(Solana), 디앱 프론트, 백엔드", "사용 기술": "Solana, Anchor, Rust, Spring, Vue.js", "역할별 기여": "<strong>블록체인</strong>: 스테이킹·보상 프로그램 개발<br><strong>프론트엔드</strong>: Vue UI 연동<br><strong>백엔드</strong>: Java API", "주요 성과": "실제 계약 단계에서 스테이킹 계약 실사용 중" } },
+            { title: "한글 NFT (2024)", images: [], tags: ["ERC-1155", "NFT", "React", "IPFS"], description: "한글날 기념, 퀴즈와 갤러리 기능을 갖춘 NFT 발행 및 거래 프로젝트", details: { "기간": "2024.06.13 – 2024.06.20 (총 1주)", "클라이언트": "개인 프로젝트", "팀 기여 분야": "블록체인, 디앱 프론트", "사용 기술": "Solidity ERC-1155, React, ethers.js, Pinata IPFS", "역할별 기여": "<strong>블록체인</strong>: NFT 발행·거래 컨트랙트<br><strong>프론트엔드</strong>: 퀴즈·갤러리 UI", "주요 성과": "컨테스트 우승", "레퍼런스": `<a href="https://github.com/6luv/hangul-nft" class="text-blue-600 hover:underline" target="_blank">GitHub Repository</a>` } },
+            { title: "Spend Module (2023)", images: [], tags: ["Cosmos", "Go", "Vesting", "Core Dev"], description: "Cosmos SDK를 사용하여 Vesting 기능이 추가된 커스텀 코어 모듈 개발", details: { "기간": "2023.03 – 2023.04 (총 1개월)", "클라이언트": "—", "팀 기여 분야": "블록체인(Cosmos) 코어 모듈 개발", "사용 기술": "Go, Cosmos SDK", "역할별 기여": "<strong>블록체인</strong>: 커스텀 모듈 개발·Vesting 기능 추가" } },
+            { title: "F&B 프랜차이즈 시스템 (2020-2023)", images: [], tags: ["ASP", "Python", "RPA", "Azure"], description: "F&B 프랜차이즈의 레거시 시스템 유지보수, 업무 자동화 및 클라우드 인프라 이관", details: { "기간": "2020.11 – 2023.08 (총 34개월)", "클라이언트": "F&B 프랜차이즈", "팀 기여 분야": "풀스택, 자동화, 인프라", "사용 기술": "Classic ASP, JavaScript, Python, MS SQL, Azure, KT Cloud", "역할별 기여": "<strong>풀스택</strong>: 자사 앱·서버 유지보수<br><strong>자동화</strong>: Python RPA 업무 자동화<br><strong>인프라</strong>: Azure→KT Cloud 이관" } },
+            { title: "토큰 제작 및 개발/운영 (2020 ~ )", images: ["https://placehold.co/1200x800/e2e8f0/1e293b?text=Token+Service"], tags: ["Full-stack", "Operations", "Multi-chain"], description: "50개 이상의 토큰·NFT 프로젝트 기획, 개발, 운영 전반을 담당", details: { "기간": "2020 ~ 현재", "클라이언트": "Dron Chain 외 50개 프로젝트 이상", "팀 기여 분야": "프론트, 백엔드, 블록체인 및 봇 제작/운영 전 분야", "사용 기술": "TypeScript, Node.js, Solidity, React, Rust, Solana, Vue.js, Spring, Python 등 다수", "레퍼런스": `<a href="https://kmong.com/gig/411503" class="text-blue-600 hover:underline" target="_blank">Kmong Service 1</a><br><a href="https://kmong.com/gig/678147" class="text-blue-600 hover:underline" target="_blank">Kmong Service 2</a><br><a href="https://kmong.com/gig/647435" class="text-blue-600 hover:underline" target="_blank">Kmong Service 3</a>` } }
+        ];
+
+        // --- SCRIPT START ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const portfolioGrid = document.getElementById('portfolio-grid');
+            const modal = document.getElementById('portfolio-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+            // 포트폴리오 목록 생성
+            portfolioData.forEach((project, index) => {
+                const projectElement = document.createElement('div');
+                projectElement.className = 'scroll-animate grid md:grid-cols-2 gap-8 md:gap-12 items-center';
+                
+                const placeholderImg = `https://placehold.co/600x400/e2e8f0/475569?text=${project.title.split(' ')[0]}`;
+                const cardImage = project.images.length > 0 ? project.images[0] : placeholderImg;
+                
+                const imageSection = `
+                    <div class="rounded-lg overflow-hidden shadow-lg subtle-glow">
+                        <img src="${cardImage}" alt="${project.title}" class="w-full h-auto object-cover" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                    </div>
+                `;
+
+                const textSection = `
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">${project.title}</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${project.tags.map(tag => `<span class="bg-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-0.5 rounded-full">${tag}</span>`).join('')}
+                        </div>
+                        <p class="text-slate-600 mb-6">${project.description}</p>
+                        <button data-index="${index}" class="open-modal-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg btn-hover">
+                            자세히 보기
+                        </button>
+                    </div>
+                `;
+
+                if (index % 2 === 0) {
+                    projectElement.innerHTML = imageSection + textSection;
+                } else {
+                    projectElement.innerHTML = textSection + imageSection;
+                    projectElement.querySelector('div:first-child').classList.add('md:order-last');
+                }
+                
+                portfolioGrid.appendChild(projectElement);
+            });
+
+            // 모달 열기
+            portfolioGrid.addEventListener('click', (e) => {
+                if (e.target.classList.contains('open-modal-btn')) {
+                    const projectIndex = e.target.dataset.index;
+                    const project = portfolioData[projectIndex];
+                    
+                    modalTitle.textContent = project.title;
+                    
+                    let imageCarouselHtml = '';
+                    if (project.images && project.images.length > 0) {
+                        const placeholderImg = `https://placehold.co/1200x800/e2e8f0/475569?text=Image+Not+Found`;
+                        imageCarouselHtml = `<div class="relative mb-6 bg-slate-100 rounded-lg" id="image-carousel"><img id="carousel-image" src="${project.images[0]}" class="w-full rounded-lg max-h-96 object-contain" onerror="this.onerror=null;this.src='${placeholderImg}';">${project.images.length > 1 ? `<button id="prev-btn" class="absolute top-1/2 left-2 transform -translate-y-1/2 text-white bg-black/30 hover:bg-black/60 p-2 rounded-full transition"><i class="fas fa-chevron-left"></i></button><button id="next-btn" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-white bg-black/30 hover:bg-black/60 p-2 rounded-full transition"><i class="fas fa-chevron-right"></i></button>` : ''}</div>`;
+                    }
+
+                    let detailsHtml = '';
+                    for (const [key, value] of Object.entries(project.details)) {
+                        detailsHtml += `<div class="mb-4"><p class="font-bold text-blue-600">${key}</p><div class="text-slate-600">${value}</div></div>`;
+                    }
+
+                    modalContent.innerHTML = imageCarouselHtml + detailsHtml;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                    
+                    if (project.images && project.images.length > 1) {
+                        let currentIndex = 0;
+                        const carouselImage = document.getElementById('carousel-image');
+                        const prevBtn = document.getElementById('prev-btn');
+                        const nextBtn = document.getElementById('next-btn');
+                        const updateImage = () => { carouselImage.src = project.images[currentIndex]; };
+                        prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + project.images.length) % project.images.length; updateImage(); });
+                        nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % project.images.length; updateImage(); });
+                    }
+                }
+            });
+
+            // 모달 닫기
+            const closeModal = () => { modal.classList.add('hidden'); modal.classList.remove('flex'); };
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+            // 모바일 메뉴 토글
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+            mobileMenuLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+            // 스크롤 애니메이션
+            const scrollElements = document.querySelectorAll('.scroll-animate');
+            const elementInView = (el, dividend = 1) => {
+                const elementTop = el.getBoundingClientRect().top;
+                return (elementTop <= (window.innerHeight || document.documentElement.clientHeight) / dividend);
+            };
+            const displayScrollElement = (element) => element.classList.add('is-visible');
+            const handleScrollAnimation = () => {
+                scrollElements.forEach((el) => {
+                    if (elementInView(el, 1.1)) { displayScrollElement(el); }
+                });
+            };
+            window.addEventListener('scroll', handleScrollAnimation);
+            handleScrollAnimation();
+
+            // --- Gemini AI 기능 ---
+            const ideaInput = document.getElementById('idea-input');
+            const generateIdeaBtn = document.getElementById('generate-idea-btn');
+            const ideaOutput = document.getElementById('idea-output');
+            const ideaLoading = document.getElementById('idea-loading');
+            const btnText = document.getElementById('btn-text');
+            const btnIcon = document.getElementById('btn-icon');
+
+            generateIdeaBtn.addEventListener('click', async () => {
+                const userInput = ideaInput.value.trim();
+                if (!userInput) {
+                    ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> 아이디어를 입력해주세요.</span></div>`;
+                    return;
+                }
+
+                // 로딩 상태 시작
+                ideaLoading.classList.remove('hidden');
+                ideaOutput.innerHTML = '';
+                generateIdeaBtn.disabled = true;
+                btnText.textContent = '생성 중...';
+                btnIcon.className = 'fas fa-spinner fa-spin ml-2';
+
+                const prompt = `
+                    당신은 경험 많은 Web3 컨설턴트입니다. 다음 아이디어를 바탕으로 구체적인 프로젝트 기획안을 JSON 형식으로 제안해주세요: "${userInput}".
+
+                    결과는 다음 JSON 스키마를 따라야 합니다:
+                    {
+                      "projectName": "창의적인 프로젝트 이름",
+                      "concept": "프로젝트에 대한 상세한 컨셉 설명",
+                      "keyFeatures": ["핵심 기능 1", "핵심 기능 2", "핵심 기능 3"],
+                      "techStack": {
+                        "blockchain": "추천 블록체인",
+                        "smartContracts": "추천 스마트 컨트랙트 언어",
+                        "frontend": "추천 프론트엔드 프레임워크",
+                        "backend": "추천 백엔드 기술"
+                      },
+                      "monetization": ["수익화 모델 1", "수익화 모델 2"]
+                    }
+                    모든 텍스트는 한국어로 작성해주세요.
+                `;
+
+                const payload = {
+                    contents: [{ role: "user", parts: [{ text: prompt }] }],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "projectName": { "type": "STRING" },
+                                "concept": { "type": "STRING" },
+                                "keyFeatures": { "type": "ARRAY", "items": { "type": "STRING" } },
+                                "techStack": {
+                                    "type": "OBJECT",
+                                    "properties": {
+                                        "blockchain": { "type": "STRING" },
+                                        "smartContracts": { "type": "STRING" },
+                                        "frontend": { "type": "STRING" },
+                                        "backend": { "type": "STRING" }
+                                    }
+                                },
+                                "monetization": { "type": "ARRAY", "items": { "type": "STRING" } }
+                            }
+                        }
+                    }
+                };
+                
+                try {
+                    const apiKey = ""; // API 키는 비워 둡니다.
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API 요청 실패: ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        
+                        const jsonText = result.candidates[0].content.parts[0].text;
+                        const data = JSON.parse(jsonText);
+
+                        ideaOutput.innerHTML = `
+                            <div class="bg-white p-6 rounded-lg shadow-lg border border-slate-200">
+                                <h3 class="text-2xl font-bold text-blue-600 mb-4">${data.projectName}</h3>
+                                <div class="space-y-4">
+                                    <div><p class="font-bold text-slate-800">컨셉:</p><p>${data.concept}</p></div>
+                                    <div><p class="font-bold text-slate-800">핵심 기능:</p><ul class="list-disc list-inside ml-4">${data.keyFeatures.map(f => `<li>${f}</li>`).join('')}</ul></div>
+                                    <div><p class="font-bold text-slate-800">추천 기술 스택:</p>
+                                        <ul class="list-disc list-inside ml-4">
+                                            <li><strong>블록체인:</strong> ${data.techStack.blockchain}</li>
+                                            <li><strong>스마트 컨트랙트:</strong> ${data.techStack.smartContracts}</li>
+                                            <li><strong>프론트엔드:</strong> ${data.techStack.frontend}</li>
+                                            <li><strong>백엔드:</strong> ${data.techStack.backend}</li>
+                                        </ul>
+                                    </div>
+                                    <div><p class="font-bold text-slate-800">수익화 모델:</p><ul class="list-disc list-inside ml-4">${data.monetization.map(m => `<li>${m}</li>`).join('')}</ul></div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        throw new Error("AI로부터 유효한 응답을 받지 못했습니다.");
+                    }
+                } catch (error) {
+                    console.error("Gemini API Error:", error);
+                    ideaOutput.innerHTML = `<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">오류:</strong><span class="block sm:inline"> 기획안 생성에 실패했습니다. 잠시 후 다시 시도해주세요.</span></div>`;
+                } finally {
+                    // 로딩 상태 종료
+                    ideaLoading.classList.add('hidden');
+                    generateIdeaBtn.disabled = false;
+                    btnText.textContent = '기획안 생성하기';
+                    btnIcon.className = 'fas fa-lightbulb ml-2';
+                }
+            });
+            
+            // 기술 스택 AI 설명 기능 (추가)
+            const techStackImage = document.querySelector('#tech-stack img');
+            if (techStackImage) {
+                 techStackImage.src = "image 9.jpg"; // 실제 이미지 경로로 수정
+            }
+        });
+    </script>
+</body>
+</html>
+"
