@@ -231,14 +231,25 @@
                 const projectElement = document.createElement('div');
                 projectElement.className = 'scroll-animate grid md:grid-cols-2 gap-8 md:gap-12 items-center';
                 
-                const placeholderImg = `https://placehold.co/600x400/e2e8f0/475569?text=${project.title.split(' ')[0]}`;
-                const cardImage = project.images.length > 0 ? project.images[0] : placeholderImg;
-                
-                const imageSection = `
-                    <div class="rounded-lg overflow-hidden shadow-lg subtle-glow">
-                        <img src="${cardImage}" alt="${project.title}" class="w-full h-80 object-cover" onerror="this.onerror=null;this.src='${placeholderImg}';">
-                    </div>
-                `;
+                let imageSection;
+
+                if (project.title === "Coquiz (2025)") {
+                    imageSection = `
+                        <div class="rounded-lg overflow-hidden shadow-lg subtle-glow flex items-center justify-center space-x-2 h-80 bg-slate-200 p-2">
+                            <img src="${project.images[0]}" alt="Coquiz Screen 1" class="w-1/3 h-full object-contain rounded-md">
+                            <img src="${project.images[1]}" alt="Coquiz Screen 2" class="w-1/3 h-full object-contain rounded-md">
+                            <img src="${project.images[2]}" alt="Coquiz Screen 3" class="w-1/3 h-full object-contain rounded-md">
+                        </div>
+                    `;
+                } else {
+                    const placeholderImg = `https://placehold.co/600x400/e2e8f0/475569?text=${project.title.split(' ')[0]}`;
+                    const cardImage = project.images.length > 0 ? project.images[0] : placeholderImg;
+                    imageSection = `
+                        <div class="rounded-lg overflow-hidden shadow-lg subtle-glow">
+                            <img src="${cardImage}" alt="${project.title}" class="w-full h-80 object-cover" onerror="this.onerror=null;this.src='${placeholderImg}';">
+                        </div>
+                    `;
+                }
 
                 const textSection = `
                     <div>
